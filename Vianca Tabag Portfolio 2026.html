@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vianca Tabag — Virtual Executive Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #E0A800;
+    --gold-deep: #C28E00;
+    --gold-soft: #FFF6DC;
+    --ink: #1C1A15;
+    --ink-soft: #5A564C;
+    --ink-faint: #908B7E;
+    --cream: #FAF6EE;
+    --cream-2: #F3EDE0;
+    --white: #FFFFFF;
+    --line: #E6DECF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(250,246,238,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 900; color: var(--ink); letter-spacing: 0.5px; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 30px; list-style: none; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { background: var(--ink); color: var(--cream); padding: 10px 22px; border-radius: 100px; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; text-decoration: none; transition: all 0.3s; }
+  .nav-cta:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 140px 48px 90px;
+    position: relative; overflow: hidden;
+  }
+  .hero-dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(var(--line) 1.4px, transparent 1.4px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero-blob {
+    position: absolute; top: 8%; right: -160px;
+    width: 540px; height: 540px;
+    background: radial-gradient(circle, rgba(224,168,0,0.18) 0%, transparent 70%);
+    pointer-events: none; animation: float 8s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+
+  .hero-content { max-width: 920px; position: relative; z-index: 2; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: var(--white); border: 1px solid var(--line); border-radius: 100px;
+    padding: 8px 18px; margin-bottom: 30px; box-shadow: 0 4px 18px rgba(28,26,21,0.04);
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-soft);
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #2FA84F; animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1.hero-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3.4rem, 8vw, 7rem);
+    font-weight: 900; line-height: 0.98; letter-spacing: -2.5px;
+    margin-bottom: 14px; animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-name em { font-style: italic; color: var(--gold); }
+  .hero-title {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.8rem, 2vw, 1.02rem);
+    color: var(--ink-faint); letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 28px; animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-desc {
+    font-size: 1.16rem; color: var(--ink-soft); max-width: 640px; line-height: 1.85;
+    margin-bottom: 42px; animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-desc strong { color: var(--ink); font-weight: 700; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
+  .btn-primary {
+    background: var(--gold); color: var(--ink); padding: 16px 34px;
+    font-weight: 700; font-size: 0.88rem; letter-spacing: 0.6px;
+    text-decoration: none; border-radius: 100px; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(224,168,0,0.28);
+  }
+  .btn-primary:hover { background: var(--gold-deep); transform: translateY(-2px); }
+  .btn-outline {
+    background: var(--white); border: 1px solid var(--line); color: var(--ink); padding: 16px 30px;
+    font-weight: 600; font-size: 0.88rem; letter-spacing: 0.6px;
+    text-decoration: none; border-radius: 100px; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold-deep); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex; gap: 52px; margin-top: 70px; padding-top: 44px;
+    border-top: 1px solid var(--line); animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .stat-num { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 900; color: var(--ink); line-height: 1; }
+  .stat-num span { color: var(--gold); }
+  .stat-label { font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; font-weight: 600; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── SECTIONS ── */
+  section { padding: 110px 48px; }
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 0.7rem;
+    color: var(--gold-deep); text-transform: uppercase; letter-spacing: 3px;
+    margin-bottom: 16px; display: inline-block;
+    background: var(--gold-soft); padding: 5px 14px; border-radius: 100px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif; font-size: clamp(2.1rem, 4.5vw, 3.6rem);
+    font-weight: 900; line-height: 1.05; letter-spacing: -1px; margin-bottom: 18px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-sub { color: var(--ink-soft); font-size: 1.02rem; max-width: 580px; line-height: 1.75; }
+  .section-header { margin-bottom: 64px; }
+  .divider { width: 52px; height: 3px; background: var(--gold); margin: 18px 0; border-radius: 4px; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--white); }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .service-card {
+    background: var(--cream); padding: 36px 32px; border-radius: 16px;
+    border: 1px solid var(--line); transition: all 0.4s; position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+  .service-card:hover { background: var(--white); transform: translateY(-6px); box-shadow: 0 18px 40px rgba(28,26,21,0.08); border-color: transparent; }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon {
+    font-size: 1.5rem; margin-bottom: 18px; width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-soft); border-radius: 12px;
+  }
+  .service-name { font-family: 'Fraunces', serif; font-size: 1.32rem; font-weight: 600; margin-bottom: 10px; }
+  .service-desc { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .tag { background: var(--white); border: 1px solid var(--line); color: var(--ink-soft); padding: 3px 11px; border-radius: 100px; font-size: 0.7rem; font-weight: 600; }
+  .service-card:hover .tag { background: var(--gold-soft); border-color: transparent; color: var(--gold-deep); }
+
+  /* ── TOOLS ── */
+  #tools { background: var(--cream); }
+  .tools-category { margin-bottom: 48px; }
+  .tools-cat-title { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .tools-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .tool-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--white); border: 1px solid var(--line);
+    padding: 10px 18px; border-radius: 100px;
+    font-size: 0.85rem; font-weight: 600; color: var(--ink);
+    transition: all 0.3s; cursor: default;
+  }
+  .tool-chip:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(28,26,21,0.06); }
+  .tool-logo-svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--white); }
+  .timeline { position: relative; padding-left: 34px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+  .timeline-item { position: relative; margin-bottom: 52px; }
+  .timeline-item:last-child { margin-bottom: 0; }
+  .timeline-dot { position: absolute; left: -41px; top: 4px; width: 14px; height: 14px; background: var(--gold); border-radius: 50%; border: 3px solid var(--white); box-shadow: 0 0 0 2px var(--gold); }
+  .timeline-period { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gold-deep); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
+  .timeline-role { font-family: 'Fraunces', serif; font-size: 1.42rem; font-weight: 600; margin-bottom: 4px; }
+  .timeline-company { font-size: 0.92rem; color: var(--ink-faint); margin-bottom: 18px; font-weight: 500; }
+  .timeline-bullets { list-style: none; }
+  .timeline-bullets li { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 9px; padding-left: 22px; position: relative; line-height: 1.6; }
+  .timeline-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+  .timeline-bullets li.win { color: var(--ink); font-weight: 600; }
+  .timeline-bullets li.win::before { content: '★'; }
+
+  /* ── PORTFOLIO ── */
+  #portfolio { background: var(--cream); }
+  .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 22px; }
+  .portfolio-card {
+    background: var(--white); border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; transition: all 0.4s;
+  }
+  .portfolio-card:hover { transform: translateY(-6px); box-shadow: 0 18px 44px rgba(28,26,21,0.09); }
+  .portfolio-card-header { padding: 32px 32px 22px; }
+  .portfolio-num { font-family: 'Fraunces', serif; font-size: 3.2rem; font-weight: 900; color: var(--cream-2); line-height: 1; margin-bottom: 14px; }
+  .portfolio-card-title { font-family: 'Fraunces', serif; font-size: 1.28rem; font-weight: 600; margin-bottom: 10px; }
+  .portfolio-card-desc { color: var(--ink-soft); font-size: 0.88rem; line-height: 1.7; }
+  .portfolio-card-footer { padding: 18px 32px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 6px; background: var(--cream); }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--white); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 22px; }
+  .testimonial-card {
+    background: var(--cream); border: 1px solid var(--line); padding: 38px 34px; border-radius: 16px; transition: all 0.3s;
+  }
+  .testimonial-card:hover { box-shadow: 0 16px 36px rgba(28,26,21,0.07); transform: translateY(-4px); }
+  .quote-mark { font-family: 'Fraunces', serif; font-size: 4.5rem; color: var(--gold); line-height: 0.4; margin-bottom: 24px; display: block; }
+  .testimonial-text { color: var(--ink-soft); font-size: 0.95rem; line-height: 1.8; margin-bottom: 26px; }
+  .testimonial-stars { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px; }
+  .testimonial-author { font-weight: 700; color: var(--ink); font-size: 0.9rem; }
+  .testimonial-role { color: var(--ink-faint); font-size: 0.8rem; margin-top: 2px; }
+
+  /* ── SETUP ── */
+  #setup { background: var(--cream); }
+  .setup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .setup-card {
+    background: var(--white); border: 1px solid var(--line); padding: 26px 24px; border-radius: 14px; transition: all 0.3s;
+  }
+  .setup-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+  .setup-icon { font-size: 1.5rem; margin-bottom: 14px; }
+  .setup-label { font-size: 0.68rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; font-family: 'Space Mono', monospace; }
+  .setup-value { font-size: 0.98rem; font-weight: 700; color: var(--ink); }
+  .setup-detail { font-size: 0.8rem; color: var(--ink-faint); margin-top: 3px; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--ink); color: var(--cream); }
+  #contact .section-label { color: var(--gold); background: rgba(224,168,0,0.12); }
+  #contact .section-title { color: var(--white); }
+  #contact .divider { background: var(--gold); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+  .contact-cta-block h2 { color: var(--white); }
+  .contact-cta-block p { color: rgba(250,246,238,0.7); font-size: 0.98rem; line-height: 1.75; margin-bottom: 30px; }
+  .contact-links { display: flex; flex-direction: column; gap: 14px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.05); padding: 18px 22px; border-radius: 12px;
+    text-decoration: none; color: var(--cream); font-weight: 600;
+    transition: all 0.3s; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .contact-link:hover { background: rgba(224,168,0,0.12); border-color: var(--gold); transform: translateX(4px); }
+  .contact-link-icon { font-size: 1.2rem; }
+  .contact-link-label { font-size: 0.68rem; opacity: 0.55; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+  .contact-link-value { font-size: 0.95rem; }
+  .btn-gold { background: var(--gold); color: var(--ink); padding: 16px 34px; font-weight: 700; font-size: 0.88rem; letter-spacing: 0.6px; text-decoration: none; border-radius: 100px; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-gold:hover { background: var(--gold-deep); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: #14120E; padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-logo { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--cream); font-weight: 900; }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { font-size: 0.78rem; color: rgba(250,246,238,0.4); }
+  .footer-links { display: flex; gap: 22px; }
+  .footer-links a { color: rgba(250,246,238,0.5); font-size: 0.8rem; text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media(max-width:768px) {
+    nav { padding: 14px 22px; }
+    .nav-links { display: none; }
+    section { padding: 72px 22px; }
+    #hero { padding: 110px 22px 60px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+    footer { flex-direction: column; text-align: center; }
+    .hero-stats { gap: 28px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Vianca<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://calendar.app.google/D4fGg1HYDicnHJiw5" target="_blank" class="nav-cta">Book a Call</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-dots"></div>
+  <div class="hero-blob"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Available Now · Remote · Full-time or Part-time</div>
+    <h1 class="hero-name">Vianca <em>Tabag</em></h1>
+    <p class="hero-title">Virtual Executive Assistant · Project Manager · Operations Specialist</p>
+    <p class="hero-desc">
+      I don't just complete tasks — I <strong>build systems, follow through, and keep executives focused</strong> on what matters most. 7+ years supporting CEOs, founders, and leadership teams across the US, Australia, and the Philippines.
+    </p>
+    <div class="hero-actions">
+      <a href="https://calendar.app.google/D4fGg1HYDicnHJiw5" target="_blank" class="btn-primary">📅 Book a Discovery Call</a>
+      <a href="https://drive.google.com/file/d/1Jdl1dkMSY4nK52Zs1W1g4VCI5mQg_1A9/view" target="_blank" class="btn-outline">📋 View Portfolio</a>
+      <a href="https://drive.google.com/file/d/1N2mBViT8VLit2Eut4H4HnRQ0WcAHBf1p/view?usp=drive_link" target="_blank" class="btn-outline">📄 Download Resume</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">7<span>+</span></div><div class="stat-label">Years Experience</div></div>
+      <div><div class="stat-num">15<span>+</span></div><div class="stat-label">Services Offered</div></div>
+      <div><div class="stat-num">3</div><div class="stat-label">Countries Served</div></div>
+      <div><div class="stat-num">0</div><div class="stat-label">Dropped Balls</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <span class="section-label">What I Do</span>
+    <h2 class="section-title">Services I <em>Offer</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">End-to-end executive support — from inbox to strategy. Here's everything I can take off your plate.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal"><div class="service-icon">📧</div><div class="service-name">Inbox & Email Management</div><div class="service-desc">Color-coded triage system, morning pass, daily end-of-day brief, response drafting in your voice. Goal: Inbox Zero so you only check email twice a day.</div><div class="service-tags"><span class="tag">Triage</span><span class="tag">Drafting</span><span class="tag">Inbox Zero</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📅</div><div class="service-name">Calendar Management</div><div class="service-desc">Color-coded by type, buffer times built in, pre-meeting briefings, post-meeting action tracking. Multi-timezone scheduling across EST, PST, AEST, GMT.</div><div class="service-tags"><span class="tag">Multi-Timezone</span><span class="tag">Buffer Time</span><span class="tag">Pre-Briefs</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">✈️</div><div class="service-name">Travel Planning & Coordination</div><div class="service-desc">Full travel packages — preference file, 3-option research, approval summary, master itinerary, on-trip rebooking support. You never think about logistics.</div><div class="service-tags"><span class="tag">Flights</span><span class="tag">Hotels</span><span class="tag">Itinerary</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📁</div><div class="service-name">Folder & File Management</div><div class="service-desc">Master folder structure, consistent naming conventions, version control, permission management. Everything findable in under 30 seconds.</div><div class="service-tags"><span class="tag">Google Drive</span><span class="tag">Naming Systems</span><span class="tag">Version Control</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📊</div><div class="service-name">Project Management</div><div class="service-desc">Task boards with owners and due dates, weekly progress reports, deadline follow-ups, SOP documentation. Nothing falls through the cracks.</div><div class="service-tags"><span class="tag">Asana</span><span class="tag">ClickUp</span><span class="tag">Trello</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">🗂️</div><div class="service-name">CRM & Database Management</div><div class="service-desc">Pipeline management, contact records, lead stage tracking, data cleanup, activity logging across Nutshell, HubSpot, GoHighLevel, and Airtable.</div><div class="service-tags"><span class="tag">Nutshell</span><span class="tag">HubSpot</span><span class="tag">Airtable</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📝</div><div class="service-name">Meeting Minutes & Coordination</div><div class="service-desc">Before, during, after — agenda prep, structured live notes, formatted minutes within 24 hours, tasks with owners and due dates, follow-ups until resolved.</div><div class="service-tags"><span class="tag">Agendas</span><span class="tag">Live Notes</span><span class="tag">Action Items</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">🎨</div><div class="service-name">Presentation Creation</div><div class="service-desc">Executive briefings, client pitch decks, board meeting packs, sales reports, training materials in PowerPoint, Google Slides, or Canva. Structure first.</div><div class="service-tags"><span class="tag">PowerPoint</span><span class="tag">Slides</span><span class="tag">Canva</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">💰</div><div class="service-name">Expense & Accounts Payable</div><div class="service-desc">Weekly expense reports, invoice processing, AP tracker with due dates, monthly reconciliation, spend dashboards with MTD and YTD views.</div><div class="service-tags"><span class="tag">Xero</span><span class="tag">BoxedUp</span><span class="tag">Reconciliation</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📋</div><div class="service-name">SOP & Process Documentation</div><div class="service-desc">If something happens more than twice, it gets documented. SOPs for inbox, CRM, travel, invoices, onboarding, meetings. Processes that scale.</div><div class="service-tags"><span class="tag">Notion</span><span class="tag">Templates</span><span class="tag">Workflows</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">🤖</div><div class="service-name">AI Tools Integration</div><div class="service-desc">Not just using AI — applying it to save you time daily. ChatGPT, Claude, Fathom, Reclaim AI, Zapier, Google Gemini. Productivity multiplied.</div><div class="service-tags"><span class="tag">Zapier</span><span class="tag">Fathom</span><span class="tag">Automation</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">👥</div><div class="service-name">Recruitment & HR Support</div><div class="service-desc">Full hiring cycle: job posting, application review, candidate shortlisting with scoring, interview scheduling, offer coordination, onboarding support.</div><div class="service-tags"><span class="tag">LinkedIn</span><span class="tag">SEEK</span><span class="tag">Onboarding</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">📱</div><div class="service-name">Social Media Management</div><div class="service-desc">Content posting, Facebook ad responses, lead generation, Google review collection, scheduling and engagement across Meta platforms.</div><div class="service-tags"><span class="tag">Meta</span><span class="tag">Hootsuite</span><span class="tag">Content</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">🔍</div><div class="service-name">Research & Reporting</div><div class="service-desc">Competitor research, market analysis, prospect research — always delivered as structured, actionable briefs. Not data dumps. Useful output every time.</div><div class="service-tags"><span class="tag">Google Sheets</span><span class="tag">Data Analysis</span><span class="tag">Research</span></div></div>
+    <div class="service-card reveal"><div class="service-icon">🛒</div><div class="service-name">E-commerce Support</div><div class="service-desc">Order tracking, listings management, sales reporting across Amazon Seller Central, eBay, Shopify, and ShipGlobal platforms.</div><div class="service-tags"><span class="tag">Amazon</span><span class="tag">Shopify</span><span class="tag">eBay</span></div></div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-header reveal">
+    <span class="section-label">Tech Stack</span>
+    <h2 class="section-title">Tools I <em>Work With</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">I pick up new tools fast. The core logic is always the same — here's what I'm fluent in today.</p>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">Project Management</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#E8505B"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="10" fill="white">A</text></svg>Asana</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#7B68EE"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">CU</text></svg>ClickUp</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0079BF"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Tr</text></svg>Trello</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF3D57"/><circle cx="11" cy="11" r="5" fill="none" stroke="white" stroke-width="2"/></svg>Monday.com</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#111"/><text x="5" y="16" font-family="Arial" font-weight="bold" font-size="11" fill="white">N</text></svg>Notion</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0078D4"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">MP</text></svg>MS Planner</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">CRM & Sales</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#F4A532"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Nu</text></svg>Nutshell CRM</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF7A59"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Hs</text></svg>HubSpot</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#00B5A5"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">GH</text></svg>GoHighLevel</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FFBF00"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="black">At</text></svg>Airtable</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">Communication</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#4A154B"/><text x="5" y="16" font-family="Arial" font-weight="bold" font-size="10" fill="white">S</text></svg>Slack</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="6" fill="#2D8CFF"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Zm</text></svg>Zoom</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#5059C9"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">MS</text></svg>MS Teams</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="6" fill="#25D366"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">WA</text></svg>WhatsApp</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#EA4335"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Gm</text></svg>Gmail</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0078D4"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Otl</text></svg>Outlook</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">Productivity</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0F9D58"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">GW</text></svg>Google Workspace</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#D83B01"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">365</text></svg>Microsoft 365</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#625DF5"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">Loom</text></svg>Loom</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#006BFF"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Cal</text></svg>Calendly</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FFCC22"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="black">DS</text></svg>DocuSign</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#D32D27"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">LP</text></svg>LastPass</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">Finance</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#1AB4D7"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Xe</text></svg>Xero</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#2CA01C"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">QB</text></svg>QuickBooks</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#25C16F"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">BxU</text></svg>BoxedUp</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">Design & Content</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#00C4CC"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Cv</text></svg>Canva</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#111"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">CC</text></svg>CapCut</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF4785"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">HG</text></svg>HeyGen</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">AI Tools</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#10A37F"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">GPT</text></svg>ChatGPT</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#CC7A00"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Cl</text></svg>Claude</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#6200EA"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">Ge</text></svg>Gemini</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#00D084"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Fth</text></svg>Fathom</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF4A00"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Zap</text></svg>Zapier</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#5B50E6"/><text x="2" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">Rcl</text></svg>Reclaim AI</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0066FF"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Ot</text></svg>Otter.ai</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#20808D"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Px</text></svg>Perplexity</div>
+    </div>
+  </div>
+
+  <div class="tools-category reveal">
+    <div class="tools-cat-title">E-commerce & HR</div>
+    <div class="tools-row">
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF9900"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Amz</text></svg>Amazon</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#96BF48"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Shp</text></svg>Shopify</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#0064D2"/><text x="4" y="16" font-family="Arial" font-weight="bold" font-size="9" fill="white">eB</text></svg>eBay</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#00B05C"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">EH</text></svg>Employment Hero</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#E57929"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="7" fill="white">Bmb</text></svg>BambooHR</div>
+      <div class="tool-chip"><svg class="tool-logo-svg" viewBox="0 0 22 22"><rect width="22" height="22" rx="5" fill="#FF6100"/><text x="3" y="16" font-family="Arial" font-weight="bold" font-size="8" fill="white">Jf</text></svg>Jotform</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-label">Work History</span>
+    <h2 class="section-title">My <em>Experience</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">7+ years of real work across logistics, real estate, government, and tech.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2024 — 2026</div>
+      <div class="timeline-role">Personal / Executive Assistant</div>
+      <div class="timeline-company">Shipping Container & Logistics Business — USA</div>
+      <ul class="timeline-bullets">
+        <li>Managed CEO calendar, email inbox, and task delegation — zero missed deadlines across daily operations</li>
+        <li>Handled 20–30+ daily customer inquiries across Facebook, email, and SMS with custom quotes</li>
+        <li>Prepared sales proposals including rent-to-own structures and payment plan coordination</li>
+        <li>Generated invoices via BoxedUp and Xero; tracked payment confirmations and maintained records</li>
+        <li>Coordinated delivery logistics with drivers and haulers across multiple US states</li>
+        <li>Maintained Nutshell CRM with lead activity, pipeline stages, and follow-up notes</li>
+        <li>Created SOPs and templates for recurring processes; reduced onboarding time</li>
+        <li>Managed Google review collection, Facebook ad responses, and lead generation</li>
+        <li class="win">Result: Business scaled from 1–3 orders/month to daily sales</li>
+      </ul>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2022 — 2024</div>
+      <div class="timeline-role">Executive Assistant</div>
+      <div class="timeline-company">Real Estate Company — Boroondara, Australia</div>
+      <ul class="timeline-bullets">
+        <li>Managed executive calendar and scheduled 30+ weekly meetings across AEST, EST, and GMT — zero conflicts</li>
+        <li>Triaged executive inbox daily — consistently achieving Inbox Zero</li>
+        <li>Tracked all tasks in Asana; monitored deadlines and followed up with stakeholders</li>
+        <li>Reviewed and organized monthly commission reports for 12 sales agents</li>
+        <li>Created SOPs for 10+ recurring workflows, standardizing operations across the team</li>
+        <li>Coordinated domestic and international travel with detailed itineraries</li>
+        <li>Conducted competitor and market research to support strategic planning</li>
+      </ul>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2020 — 2022</div>
+      <div class="timeline-role">General Virtual Assistant</div>
+      <div class="timeline-company">Multiple US-Based Clients</div>
+      <ul class="timeline-bullets">
+        <li>Executive assistance, data entry, database management, and admin support across multiple clients</li>
+        <li>End-to-end HR recruitment: job postings, candidate screening, interview scheduling, onboarding</li>
+        <li>E-commerce operations: order tracking, listings management, sales reporting</li>
+        <li>Financial coordination: invoicing, expense tracking, payroll support</li>
+        <li>Internet and prospect research for business development and lead generation</li>
+      </ul>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2019 — 2020</div>
+      <div class="timeline-role">Executive Administrative Assistant</div>
+      <div class="timeline-company">Provincial Government of Tarlac</div>
+      <ul class="timeline-bullets">
+        <li>Managed the Governor's calendar, appointments, and travel for official engagements</li>
+        <li>Drafted and routed official correspondence and briefing materials</li>
+        <li>Organized government events including public forums and ceremonial functions</li>
+        <li>Maintained confidential records of official documents and legislative materials</li>
+        <li>Prepared briefing decks and presentation materials for high-level meetings</li>
+      </ul>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">2018 — 2019</div>
+      <div class="timeline-role">HR & Administration Staff</div>
+      <div class="timeline-company">International Wiring System</div>
+      <ul class="timeline-bullets">
+        <li>Onboarding and training for new employees — compliance with company policies</li>
+        <li>Assisted in Training Needs Analysis and preparation of annual training plans</li>
+        <li>Recruitment coordination: job postings, interview scheduling, onboarding documentation</li>
+        <li>Managed employee records and supported payroll processing and benefits administration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header reveal">
+    <span class="section-label">Real Work</span>
+    <h2 class="section-title">Portfolio <em>Highlights</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">Systems I've built. Processes I've documented. Results I've delivered.</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">01</div><div class="portfolio-card-title">Inbox Zero System</div><div class="portfolio-card-desc">Built color-coded triage system in Outlook and Gmail. CEO went from checking email all day to just twice — morning and afternoon. Labels: Urgent, To-Do, FYI, Delegated, Invoice.</div></div><div class="portfolio-card-footer"><span class="tag">Gmail</span><span class="tag">Outlook</span><span class="tag">Daily Brief</span></div></div>
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">02</div><div class="portfolio-card-title">Sales Pipeline Built From Scratch</div><div class="portfolio-card-desc">Joined a logistics business with no CRM, no follow-up system, no templates. Built everything: Nutshell CRM pipeline, response templates, Google Sheets lead tracker, full SOP library. Business went from 1–3 orders/month to daily sales.</div></div><div class="portfolio-card-footer"><span class="tag">Nutshell CRM</span><span class="tag">Google Sheets</span><span class="tag">SOPs</span></div></div>
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">03</div><div class="portfolio-card-title">Master Folder Structure</div><div class="portfolio-card-desc">Built complete file system from scratch: 10 categories, consistent YYYY-MM-DD naming convention, version control (v1, v2, FINAL, FINAL-APPROVED), permission layers. Findable in under 30 seconds.</div></div><div class="portfolio-card-footer"><span class="tag">Google Drive</span><span class="tag">Naming Systems</span><span class="tag">Permissions</span></div></div>
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">04</div><div class="portfolio-card-title">Travel Management System</div><div class="portfolio-card-desc">Created preference files, flight comparison sheets, hotel comparison databases, and one-page approval summaries. Executive never had to think about logistics once they approved a trip.</div></div><div class="portfolio-card-footer"><span class="tag">Google Sheets</span><span class="tag">Itineraries</span><span class="tag">Vendor Coordination</span></div></div>
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">05</div><div class="portfolio-card-title">Asana Weekly Key Items Board</div><div class="portfolio-card-desc">Converted meeting action items into tracked Asana tasks with owners, due dates, and status flags. Weekly progress reports shared every Friday — no status chasing, no surprises.</div></div><div class="portfolio-card-footer"><span class="tag">Asana</span><span class="tag">Weekly Reports</span><span class="tag">Tracking</span></div></div>
+    <div class="portfolio-card reveal"><div class="portfolio-card-header"><div class="portfolio-num">06</div><div class="portfolio-card-title">Expense & AP Tracking Dashboard</div><div class="portfolio-card-desc">Built Google Sheets spend tracker with category breakdown, month-to-date and YTD views. AMEX expense reports, Xero invoicing, payment tracking, monthly reconciliation.</div></div><div class="portfolio-card-footer"><span class="tag">Google Sheets</span><span class="tag">Xero</span><span class="tag">BoxedUp</span></div></div>
+  </div>
+  <div style="text-align:center; margin-top: 46px;" class="reveal">
+    <a href="https://drive.google.com/file/d/1Jdl1dkMSY4nK52Zs1W1g4VCI5mQg_1A9/view" target="_blank" class="btn-primary">View Full Portfolio PDF →</a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header reveal">
+    <span class="section-label">What Clients Say</span>
+    <h2 class="section-title">Client <em>Reviews</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal"><span class="quote-mark">"</span><p class="testimonial-text">Vianca consistently goes above and beyond, delivering high-quality work with incredible attention to detail. Her ability to manage tasks smartly, improve processes, and collaborate effectively makes her an invaluable asset.</p><div class="testimonial-stars">★★★★★</div><div class="testimonial-author">Administrative Client</div><div class="testimonial-role">US-Based Business</div></div>
+    <div class="testimonial-card reveal"><span class="quote-mark">"</span><p class="testimonial-text">She maintains excellent organization, ensuring all emails and tasks are managed efficiently, creating a sense of security for the client. Her proactive approach and reliability make her an invaluable member of the team.</p><div class="testimonial-stars">★★★★★</div><div class="testimonial-author">Executive Client</div><div class="testimonial-role">Australian Company</div></div>
+    <div class="testimonial-card reveal"><span class="quote-mark">"</span><p class="testimonial-text">Vianca worked with us as our Executive Assistant and was truly a valued member of our team. She is friendly, trustworthy, and hardworking. We entrusted her with various administrative and accounting tasks, all of which she handled efficiently and with great attention to detail. I would gladly recommend her for any role that requires professionalism, dedication, and a positive attitude.</p><div class="testimonial-stars">★★★★★</div><div class="testimonial-author">Maria Angelica Catap</div><div class="testimonial-role">Senior Support Specialist · Project Management & Admin</div></div>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="section-header reveal">
+    <span class="section-label">Remote Work Setup</span>
+    <h2 class="section-title">Built for <em>Reliability</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">Professional, redundant, and always online. Your work doesn't stop because of outages or connection issues.</p>
+  </div>
+  <div class="setup-grid">
+    <div class="setup-card reveal"><div class="setup-icon">🖥️</div><div class="setup-label">Primary Workstation</div><div class="setup-value">Mac Mini M4</div><div class="setup-detail">Dual monitors setup</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">💻</div><div class="setup-label">Backup Device</div><div class="setup-value">MacBook Air M1</div><div class="setup-detail">Fully operational backup</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">📶</div><div class="setup-label">Primary Internet</div><div class="setup-value">50 Mbps Fiber</div><div class="setup-detail">Dedicated connection</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">📱</div><div class="setup-label">Backup Internet</div><div class="setup-value">Mobile Hotspot</div><div class="setup-detail">25 Mbps backup ready</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">⚡</div><div class="setup-label">Power Backup</div><div class="setup-value">Power Station</div><div class="setup-detail">Outages don't stop work</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">🌏</div><div class="setup-label">Time Zones</div><div class="setup-value">EST · CST · PST</div><div class="setup-detail">Also AEST · GMT</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">🎓</div><div class="setup-label">Education</div><div class="setup-value">AB Communication</div><div class="setup-detail">Cum Laude · Tarlac State University</div></div>
+    <div class="setup-card reveal"><div class="setup-icon">🗣️</div><div class="setup-label">English Proficiency</div><div class="setup-value">C2 Advanced</div><div class="setup-detail">Fluent written and spoken</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-cta-block reveal">
+      <span class="section-label">Let's Work Together</span>
+      <h2 class="section-title">Ready to take things off your plate?</h2>
+      <div class="divider"></div>
+      <p>I'm available immediately for full-time or part-time roles. Let's talk about what you need and how I can help.</p>
+      <a href="https://calendar.app.google/D4fGg1HYDicnHJiw5" target="_blank" class="btn-gold">📅 Book a Discovery Call</a>
+    </div>
+    <div class="contact-links reveal">
+      <a href="mailto:vtabag17@gmail.com" class="contact-link"><span class="contact-link-icon">✉️</span><div><span class="contact-link-label">Email</span><span class="contact-link-value">vtabag17@gmail.com</span></div></a>
+      <a href="tel:+639064211545" class="contact-link"><span class="contact-link-icon">📞</span><div><span class="contact-link-label">Phone / WhatsApp</span><span class="contact-link-value">+63 906 421 1545</span></div></a>
+      <a href="https://www.linkedin.com/in/vianca-lorraine-tabag-390239172/" target="_blank" class="contact-link"><span class="contact-link-icon">💼</span><div><span class="contact-link-label">LinkedIn</span><span class="contact-link-value">Vianca Lorraine Tabag</span></div></a>
+      <a href="https://drive.google.com/file/d/1Jdl1dkMSY4nK52Zs1W1g4VCI5mQg_1A9/view" target="_blank" class="contact-link"><span class="contact-link-icon">📋</span><div><span class="contact-link-label">Portfolio</span><span class="contact-link-value">View EA Portfolio</span></div></a>
+      <a href="https://drive.google.com/file/d/1N2mBViT8VLit2Eut4H4HnRQ0WcAHBf1p/view?usp=drive_link" target="_blank" class="contact-link"><span class="contact-link-icon">📄</span><div><span class="contact-link-label">Resume</span><span class="contact-link-value">Download Resume</span></div></a>
+      <a href="https://drive.google.com/file/d/1HOj9AtAhw415cJtHsvj7PPN4Had5vDSg/view" target="_blank" class="contact-link"><span class="contact-link-icon">🎬</span><div><span class="contact-link-label">Video Introduction</span><span class="contact-link-value">Watch Intro Video</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Vianca Tabag<span>.</span></div>
+  <div class="footer-copy">© 2026 · Virtual Executive Assistant · Tarlac, Philippines</div>
+  <div class="footer-links">
+    <a href="mailto:vtabag17@gmail.com">Email</a>
+    <a href="https://www.linkedin.com/in/vianca-lorraine-tabag-390239172/" target="_blank">LinkedIn</a>
+    <a href="https://www.instagram.com/viancatabag.virtualassistant/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/viankeeeee" target="_blank">Facebook</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.services-grid, .portfolio-grid, .testimonials-grid, .setup-grid, .tools-row').forEach(grid => {
+    Array.from(grid.children).forEach((child, i) => { child.style.transitionDelay = (i * 0.06) + 's'; });
+  });
+</script>
+</body>
+</html>
